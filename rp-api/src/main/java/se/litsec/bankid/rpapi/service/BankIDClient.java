@@ -89,4 +89,11 @@ public interface BankIDClient {
    */
   CollectResponse collect(String orderReference) throws UserCancelException, BankIDException;
 
+  /**
+   * Returns the QR generator that should be used to generate QR codes.
+   * 
+   * @return a {@code QRGenerator} or {@code null} if no QR code generator has been configured
+   */
+  QRGenerator getQRGenerator();
+
 }

@@ -281,6 +281,36 @@ public class Requirement {
     }
 
     /**
+     * Constructor setting up a builder from the supplied requirement object.
+     * 
+     * @param requirement
+     *          the object to initialize the builder from
+     */
+    public RequirementBuilder(Requirement requirement) {
+      this();
+      if (requirement == null) {
+        return;
+      }
+
+      if (requirement.getCertificatePolicies() != null && !requirement.getCertificatePolicies().isEmpty()) {
+        this.enableMobile = requirement.getCertificatePolicies().contains(Requirement.CP_MOBILE_BANKID)
+            || requirement.getCertificatePolicies().contains(Requirement.CP_MOBILE_BANKID_TEST);
+        this.enableOnFile = requirement.getCertificatePolicies().contains(Requirement.CP_BANKID_ON_FILE)
+            || requirement.getCertificatePolicies().contains(Requirement.CP_BANKID_ON_FILE_TEST);
+        this.enableOnSmartCard = requirement.getCertificatePolicies().contains(Requirement.CP_BANKID_ON_SMARTCARD)
+            || requirement.getCertificatePolicies().contains(Requirement.CP_BANKID_ON_SMARTCARD_TEST);
+        this.enableNordea = requirement.getCertificatePolicies().contains(Requirement.CP_NORDEA_EID)
+            || requirement.getCertificatePolicies().contains(Requirement.CP_NORDEA_EID_TEST);
+      }
+      this.requirement.setCardReader(requirement.getCardReader());
+      this.requirement.setAllowFingerprint(requirement.getAllowFingerprint());
+      if (requirement.getAutoStartTokenRequired() != null && requirement.getAutoStartTokenRequired().booleanValue()) {
+        this.requirement.setAutoStartTokenRequired(Boolean.TRUE);
+      }
+      this.requirement.setIssuerCn(requirement.getIssuerCn());
+    }
+
+    /**
      * Returns the built {@code Requirement} object
      * 
      * @return a {@code Requirement} object
@@ -460,27 +490,27 @@ public class Requirement {
     //
     // Helpers
     //
-    private static String BANKID_ON_FILE(boolean production) {
+    public static String BANKID_ON_FILE(boolean production) {
       return production ? CP_BANKID_ON_FILE : CP_BANKID_ON_FILE_TEST;
     }
 
-    private static String BANKID_ON_SMARTCARD(boolean production) {
+    public static String BANKID_ON_SMARTCARD(boolean production) {
       return production ? CP_BANKID_ON_SMARTCARD : CP_BANKID_ON_SMARTCARD_TEST;
     }
 
-    private static String MOBILE_BANKID(boolean production) {
+    public static String MOBILE_BANKID(boolean production) {
       return production ? CP_MOBILE_BANKID : CP_MOBILE_BANKID_TEST;
     }
 
-    private static String NORDEA_EID(boolean production) {
+    public static String NORDEA_EID(boolean production) {
       return production ? CP_NORDEA_EID : CP_NORDEA_EID_TEST;
     }
 
-    private static String NORDEA_CA_SMARTCARD(boolean production) {
+    public static String NORDEA_CA_SMARTCARD(boolean production) {
       return production ? NORDEA_CA_SMARTCARD : NORDEA_CA_SMARTCARD_TEST;
     }
 
-    private static String NORDEA_CA_FILE(boolean production) {
+    public static String NORDEA_CA_FILE(boolean production) {
       return production ? NORDEA_CA_FILE : NORDEA_CA_FILE_TEST;
     }
   }

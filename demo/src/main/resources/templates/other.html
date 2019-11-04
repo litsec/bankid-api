@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+<head th:include="fragments/base :: headerFragment">
+  <title id="pageTitle" th:inline="text">[[#{bankid.msg.title}]]</title>
+</head>
+<body>
+
+  <div th:replace="fragments/header :: logotype"></div>
+  
+  <div class="container main">
+
+    <div th:replace="fragments/header :: language(languages = ${languages}, path='/')"></div>
+    
+    <div class="row" id="mainDiv">
+      <div class="col-sm-12 content-container">
+
+        <div class="row">
+          <div class="col-sm-12 content-heading">
+            <h2 th:text="#{bankid.msg.heading}">Heading</h2>
+          </div>
+          <div class="col-sm-12">
+            <p class="info" th:text="#{bankid.msg.other.intro.1}">Intro</p>
+          </div>
+        </div>
+        
+        <hr class="full-width">
+        
+        <div id="selectType" th:classappend="${enterPersonalNumber} ? noscripthide : ''">
+        <form method="POST" action="#" th:action="@{/startOther}">
+        <div class="row section">
+          <div class="col-12 select-area">
+          <button id="personalIdButton" type="submit" class="btn btn-primary" name="otherAction" value="personalId">
+            <span th:text="#{bankid.button.use-personal-id}">Personal identity number</span>
+          </button>
+          <button id="qrButton" type="submit" class="btn btn-primary" name="otherAction" value="qrCode">
+            <span th:text="#{bankid.button.use-qr-code}">QR code</span>
+          </button>
+          </div>
+        </div>
+        </form>
+        </div>
+
+        <div id="enterPersonalNumber" th:classappend="${enterPersonalNumber} ? '' : noscripthide">
+        <form method="POST" action="#" th:action="@{/startOther}">
+        <div class="row section">
+          <div class="col-sm-12">
+            <div class="form-group">              
+              <label for="personalIdNumber"><span th:text="#{bankid.msg.enter-pnr}">Enter personal identity number</span></label>
+                <input type="text" class="form-control" id="personalIdNumber" placeholder="YYYYMMDD-NNNN" name="personalIdNumber">
+            </div>
+            <button id="loginButton" type="submit" class="btn btn-primary" name="otherAction" value="personalId">
+              <span th:text="#{bankid.button.login}">Logga in</span>
+            </button>
+          </div>
+        </div>
+        </form>
+        </div>        
+            
+      </div> <!-- /.col-sm-12 content-container -->
+      
+      <div class="col-sm-12 return">
+        <a href="/" th:href="@{/}"><span th:text="#{bankid.button.cancel}">Cancel</span></a>
+      </div>
+            
+      <div th:replace="fragments/footer :: copyright"></div>      
+      
+    </div> <!-- /#mainDiv -->
+
+  </div> <!-- /.container main -->
+
+  <th:block th:include="fragments/base :: scriptFragment"></th:block>
+  
+</body>
+</html>

@@ -31,23 +31,28 @@ public enum ProgressStatus {
    * STARTED or USER_SIGN.
    */
   OUTSTANDING_TRANSACTION("outstandingTransaction"),
+  
   /**
    * The order is being processed. The client has not yet received the order.
    */
   NO_CLIENT("noClient"),
+  
   /**
    * The order is pending. A client has been started with the autostarttoken but a usable ID has not yet been found in
    * the started client.
    */
   STARTED("started"),
+  
   /**
    * The client has received the order.
    */
   USER_SIGN("userSign"),
+  
   /**
    * An unknown hint code was received in the collect response.
    */
   UNKNOWN_HINTCODE("unknown_hintcode"),
+  
   /**
    * The user has provided the security code and completed the order. Collect response includes the signature, user
    * information and the ocsp response.

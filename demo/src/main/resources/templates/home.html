@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+<head th:include="fragments/base :: headerFragment">
+  <title id="pageTitle" th:inline="text">[[#{bankid.msg.title}]]</title>
+</head>
+<body>
+
+  <div th:replace="fragments/header :: logotype"></div>
+  
+  <div class="container main">
+
+    <div th:replace="fragments/header :: language(languages = ${languages}, path='/')"></div>
+    
+    <div class="row" id="mainDiv">
+      <div class="col-sm-12 content-container">
+
+        <div class="row">
+          <div class="col-sm-12 content-heading">
+            <h2 th:text="#{bankid.msg.heading}">Heading</h2>
+          </div>
+          <div class="col-sm-12">
+            <p class="info">
+              <span th:text="#{bankid.msg.intro.1}">Intro 1</span> <a href="https://github.com/litsec/bankid-api" target="_blank">github.com/litsec/bankid-api</a>. 
+            </p>
+            <p class="info" th:text="#{bankid.msg.intro.2}">Intro 2</p>
+            <p class="info" th:text="#{bankid.msg.intro.3}">Intro 3</p>
+          </div>
+        </div>
+        
+        <hr class="full-width">
+        
+        <div class="row section" id="submitDiv">
+          <div class="col-12">
+            <div class="select-area">
+              <p th:text="#{bankid.msg.auth-using}">Authenticate using:</p>
+              <form method="POST" action="#" th:action="@{/auth}">
+                <button id="thisDeviceButton" type="submit" class="btn btn-primary" name="action" value="thisDevice">
+                  <span th:text="#{bankid.button.this-device}">This device</span>
+                </button>
+                <button id="otherDeviceButton" type="submit" class="btn btn-primary" name="action" value="otherDevice">
+                  <span th:text="#{bankid.button.other-device}">Other device</span>
+                </button>
+                <input type="hidden" name="debug" th:value="${debug}" />
+              </form>
+            </div>
+          </div>
+        </div> <!-- /#submitDiv -->        
+        
+        <!-- 
+        <div class="providers" id="submitDiv">
+          <div class="row">
+            <div class="col-12">
+              <form method="POST" action="#" th:action="@{/saml2/request}">
+                <input type="hidden" name="debug" th:value="${debug}" />
+                <th:block th:if="${idpList.empty}">
+                  <p class="info">No identity providers are available.</p>
+                </th:block>
+                <th:block th:if="${!idpList.empty}">
+                  <th:block th:each="idpData,idpStat:${idpList}">
+                    <button class="provider-button" type="submit" name="selectedIdp" th:value="${idpData.getEntityID()}">
+                    <div class="provider">                    
+                      <img th:src="@{${idpData.getLogotype()}}"/>
+                      <p th:text='${idpData.getDisplayName()}'>IdP</p>
+                      <th:block th:if="${idpData.getDescription() != null}">
+                        <p class="idp-description" th:text='${idpData.getDescription()}'>Additional text</p>
+                      </th:block>   
+                    </div>
+                    </button>
+                  </th:block>
+                </th:block>
+              </form>
+            </div>
+          </div>  
+        </div>
+        -->        
+        
+      </div> <!-- /.col-sm-12 content-container -->
+      
+      <div th:replace="fragments/footer :: copyright"></div>      
+      
+    </div> <!-- /#mainDiv -->
+
+  </div> <!-- /.container main -->
+
+  <th:block th:include="fragments/base :: scriptFragment"></th:block>
+  
+</body>
+</html>

@@ -167,4 +167,11 @@ public class BankIDException extends Exception {
     this.details = details;
   }
 
+  /** {@inheritDoc} */
+  @Override
+  public String toString() {
+    return String.format("error-code='%s', details=%s", (this.errorCode != null ? this.errorCode.getValue() : "unknown"), 
+      this.details != null ? this.details : "<not-set>"); 
+  }
+
 }
