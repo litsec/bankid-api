@@ -29,7 +29,7 @@ The **bankid-rp-api** jar is published to Maven central. Include the following i
 
 ### Resources
 
-* [Javadoc for the API](https://litsec.github.io/bankid-api/javadoc/)
+* [Javadoc for the API](https://litsec.github.io/bankid-api/javadoc/index.html)
 * [BankID Technical Information](https://www.bankid.com/bankid-i-dina-tjanster/rp-info)
 * [BankID Relying Party Guidelines v3.2.2](https://www.bankid.com/assets/bankid/rp/bankid-relying-party-guidelines-v3.2.2.pdf)
 
