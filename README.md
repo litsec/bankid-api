@@ -29,12 +29,13 @@ The **bankid-rp-api** jar is published to Maven central. Include the following i
 
 ### Resources
 
-*) [BankID Technical Information](https://www.bankid.com/bankid-i-dina-tjanster/rp-info)
+* [Javadoc for the API](https://litsec.github.io/bankid-api/javadoc/)
+* [BankID Technical Information](https://www.bankid.com/bankid-i-dina-tjanster/rp-info)
 * [BankID Relying Party Guidelines v3.2.2](https://www.bankid.com/assets/bankid/rp/bankid-relying-party-guidelines-v3.2.2.pdf)
 
 ### Licenses
 
-The Litsec bankid-api project uses the following Open Source libraries:
+The) Litsec bankid-api project uses the following Open Source libraries:
 
 * [Spring Framework](https://spring.io/projects/spring-framework) under the [Apache License](https://github.com/spring-projects/spring-framework/blob/master/src/docs/dist/license.txt).
 

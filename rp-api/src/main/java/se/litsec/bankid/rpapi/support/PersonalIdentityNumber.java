@@ -80,6 +80,7 @@ public class PersonalIdentityNumber implements Serializable {
    * Constructor that parses the supplied personal identity number.
    * <p>
    * The following formats are supported:
+   * </p>
    * <ul>
    * <li>12 digits with no delimiter, e.g. "196904146856".</li>
    * <li>12 digits with a delimiter, e.g. "19690414-6856".</li>
@@ -88,7 +89,6 @@ public class PersonalIdentityNumber implements Serializable {
    * <li>10 digits with a delimiter, e.g. "690414-6856". The year the person is 100 years old, the delimiter changes to
    * '+'.</li>
    * </ul>
-   * </p>
    *
    * @param number
    *          the string representation of the personal identity number

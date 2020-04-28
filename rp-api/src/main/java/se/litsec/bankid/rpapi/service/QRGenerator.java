@@ -65,6 +65,7 @@ public interface QRGenerator {
    * Generates a QR code image as a Base64 encoded image.
    * <p>
    * For example:
+   * </p>
    * 
    * <pre>
    * {@code data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUA
@@ -72,17 +73,16 @@ public interface QRGenerator {
    * 9TXL0Y4OHwAAAABJRU5ErkJggg==
    * }
    * </pre>
-   * </p>
+   * 
    * <p>
    * The image may then be directly inserted in HTML code as:
-   * 
+   * </p>
    * <pre>
    * {@code <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUA
    * AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
    * 9TXL0Y4OHwAAAABJRU5ErkJggg==" scale="0">
    * }
    * </pre>
-   * </p>
    * 
    * @param autoStartToken
    *          the BankID autostart token
