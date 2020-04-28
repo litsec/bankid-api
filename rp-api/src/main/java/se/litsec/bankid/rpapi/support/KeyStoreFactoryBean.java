@@ -42,7 +42,7 @@ public class KeyStoreFactoryBean extends AbstractFactoryBean<KeyStore> {
    * 
    * @param keyStoreResource
    *          JKS resource
-   * @param storePassword
+   * @param keyStorePassword
    *          the password for unlocking the keystore
    */
   public KeyStoreFactoryBean(final Resource keyStoreResource, final char[] keyStorePassword) {
@@ -55,9 +55,9 @@ public class KeyStoreFactoryBean extends AbstractFactoryBean<KeyStore> {
    * 
    * @param keyStoreResource
    *          JKS resource
-   * @param storePassword
+   * @param keyStorePassword
    *          the password for unlocking the keystore
-   * @param storeType
+   * @param keyStoreType
    *          the type of keystore
    */
   public KeyStoreFactoryBean(final Resource keyStoreResource, final char[] keyStorePassword, final String keyStoreType) {

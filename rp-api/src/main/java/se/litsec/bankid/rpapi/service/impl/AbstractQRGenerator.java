@@ -83,7 +83,7 @@ public abstract class AbstractQRGenerator implements QRGenerator {
   /**
    * Assigns the default width (in pixels) to use for generated QR images.
    * <p>
-   * If not assigned, {@value #DEFAULT_WIDTH} will be used.
+   * If not assigned, {@link #DEFAULT_WIDTH} will be used.
    * </p>
    *
    * @param defaultWidth
@@ -96,7 +96,7 @@ public abstract class AbstractQRGenerator implements QRGenerator {
   /**
    * Assigns the default height (in pixels) to use for generated QR images.
    * <p>
-   * If not assigned, {@value #DEFAULT_HEIGHT} will be used.
+   * If not assigned, {@link #DEFAULT_HEIGHT} will be used.
    * </p>
    *
    * @param defaultHeight
@@ -109,7 +109,7 @@ public abstract class AbstractQRGenerator implements QRGenerator {
   /**
    * Assigns the configured default image format to use for generated QR images.
    * <p>
-   * If not assigned, {@value #DEFAULT_IMAGE_FORMAT} will be used.
+   * If not assigned, {@link #DEFAULT_IMAGE_FORMAT} will be used.
    * </p>
    *
    * @param defaultImageFormat

@@ -6,7 +6,7 @@
   <groupId>se.litsec.bankid</groupId>
   <artifactId>bankid-rp-api</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <name>Litsec :: BankID Relying Party API</name>
   <description>Library implementing the BankID Relying Party API</description>
@@ -316,7 +316,7 @@
               <windowtitle>Litsec - BankID Relying Party API - ${project.version}</windowtitle>
 
               <links>
-                <link>https://docs.spring.io/spring/docs/${spring.version}/javadoc-api/</link>
+                <link>https://docs.spring.io/spring/docs/${spring.min.version}/javadoc-api/</link>
               </links>
               <detectJavaApiLink>true</detectJavaApiLink>
             </configuration>
