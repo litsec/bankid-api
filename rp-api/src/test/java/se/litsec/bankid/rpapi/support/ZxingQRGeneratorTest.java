@@ -33,6 +33,7 @@ import com.google.zxing.common.HybridBinarizer;
 
 import se.litsec.bankid.rpapi.service.QRGenerator;
 import se.litsec.bankid.rpapi.service.QRGenerator.ImageFormat;
+import se.litsec.bankid.rpapi.service.impl.ZxingQRGenerator;
 
 /**
  * Test cases for the {@code ZxingQRGenerator} class.

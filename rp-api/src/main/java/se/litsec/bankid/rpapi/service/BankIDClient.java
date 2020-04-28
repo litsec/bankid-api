@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public interface BankIDClient {
    * @throws BankIDException
    *           for errors
    */
-  OrderResponse authenticate(String personalIdentityNumber, String endUserIp, Requirement requirement) throws BankIDException;
+  OrderResponse authenticate(final String personalIdentityNumber, final String endUserIp, final Requirement requirement) throws BankIDException;
 
   /**
    * Request a signing order. The {@link #collect(String)} method is used to query the status of the order.
@@ -62,8 +62,8 @@ public interface BankIDClient {
    * @throws BankIDException
    *           for errors
    */
-  OrderResponse sign(String personalIdentityNumber, String endUserIp, DataToSign dataToSign, Requirement requirement)
-      throws BankIDException;
+  OrderResponse sign(final String personalIdentityNumber, final String endUserIp,
+      final DataToSign dataToSign, final Requirement requirement) throws BankIDException;
 
   /**
    * Cancels an ongoing order.
@@ -73,7 +73,7 @@ public interface BankIDClient {
    * @throws BankIDException
    *           for errors
    */
-  void cancel(String orderReference) throws BankIDException;
+  void cancel(final String orderReference) throws BankIDException;
 
   /**
    * Collects the result from {@link #authenticate(String, String, Requirement)} or
@@ -87,12 +87,12 @@ public interface BankIDClient {
    * @throws BankIDException
    *           for errors
    */
-  CollectResponse collect(String orderReference) throws UserCancelException, BankIDException;
+  CollectResponse collect(final String orderReference) throws UserCancelException, BankIDException;
 
   /**
    * Returns the QR generator that should be used to generate QR codes.
    * 
-   * @return a {@code QRGenerator} or {@code null} if no QR code generator has been configured
+   * @return a QRGenerator or null if no QR code generator has been configured
    */
   QRGenerator getQRGenerator();
 

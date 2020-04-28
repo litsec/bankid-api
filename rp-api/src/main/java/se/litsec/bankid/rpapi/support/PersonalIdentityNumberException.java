@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ public class PersonalIdentityNumberException extends Exception {
    * @param message
    *          the error message
    */
-  public PersonalIdentityNumberException(String message) {
+  public PersonalIdentityNumberException(final String message) {
     super(message);
   }
 
@@ -43,7 +43,7 @@ public class PersonalIdentityNumberException extends Exception {
    * @param cause
    *          the cause of the error
    */
-  public PersonalIdentityNumberException(String message, Throwable cause) {
+  public PersonalIdentityNumberException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

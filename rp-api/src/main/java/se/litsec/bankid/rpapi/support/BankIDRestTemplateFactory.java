@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,21 +65,21 @@ public class BankIDRestTemplateFactory extends AbstractFactoryBean<RestTemplate>
   @Override
   protected RestTemplate createInstance() throws Exception {
     
-    PrivateKeyStrategy keyStrategy = (aliases, socket) -> {
+    final PrivateKeyStrategy keyStrategy = (aliases, socket) -> {
       return this.keyAlias != null ? this.keyAlias : aliases.keySet().stream().findFirst().orElse(null);
     };
 
-    SSLContext sslContext = SSLContextBuilder.create()
+    final SSLContext sslContext = SSLContextBuilder.create()
       .loadKeyMaterial(this.keyStore, this.keyPassword, keyStrategy)
       .loadTrustMaterial(this.trustStore, null)
       .build();
 
-    CloseableHttpClient httpClient = HttpClients.custom()
+    final CloseableHttpClient httpClient = HttpClients.custom()
       .setSSLContext(sslContext)
       .setSSLHostnameVerifier(new DefaultHostnameVerifier())
       .build();
 
-    HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+    final HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
     requestFactory.setHttpClient(httpClient);
 
     return new RestTemplate(requestFactory);
@@ -89,9 +89,9 @@ public class BankIDRestTemplateFactory extends AbstractFactoryBean<RestTemplate>
    * Assigns the trusted root certificate that we use when verifying the BankID server certificate.
    * 
    * @param trustedRoot
-   *          resource to the trusted root certificate.
+   *          resource to the trusted root certificate
    */
-  public void setTrustedRoot(Resource trustedRoot) {
+  public void setTrustedRoot(final Resource trustedRoot) {
     this.trustedRoot = trustedRoot;
   }
 
@@ -104,7 +104,7 @@ public class BankIDRestTemplateFactory extends AbstractFactoryBean<RestTemplate>
    * @param keyStore
    *          the keystore
    */
-  public void setKeyStore(KeyStore keyStore) {
+  public void setKeyStore(final KeyStore keyStore) {
     this.keyStore = keyStore;
   }
 
@@ -115,7 +115,7 @@ public class BankIDRestTemplateFactory extends AbstractFactoryBean<RestTemplate>
    * @param keyAlias
    *          the key alias
    */
-  public void setKeyAlias(String keyAlias) {
+  public void setKeyAlias(final String keyAlias) {
     this.keyAlias = StringUtils.hasText(keyAlias) ? keyAlias.trim() : null;
   }
 
@@ -125,7 +125,7 @@ public class BankIDRestTemplateFactory extends AbstractFactoryBean<RestTemplate>
    * @param keyPassword
    *          the key entry password
    */
-  public void setKeyPassword(char[] keyPassword) {
+  public void setKeyPassword(final char[] keyPassword) {
     Assert.notNull(keyPassword, "'keyPassword' must not be null");
     this.keyPassword = new char[keyPassword.length];
     System.arraycopy(keyPassword, 0, this.keyPassword, 0, keyPassword.length);

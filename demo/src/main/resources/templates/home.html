@@ -20,10 +20,11 @@
           </div>
           <div class="col-sm-12">
             <p class="info">
-              <span th:text="#{bankid.msg.intro.1}">Intro 1</span> <a href="https://github.com/litsec/bankid-api" target="_blank">github.com/litsec/bankid-api</a>. 
+              <span th:text="#{bankid.msg.intro.1}">Intro 1</span> <a href="https://github.com/litsec/bankid-api" target="_blank">github.com/litsec/bankid-api</a> 
             </p>
-            <p class="info" th:text="#{bankid.msg.intro.2}">Intro 2</p>
-            <p class="info" th:text="#{bankid.msg.intro.3}">Intro 3</p>
+            <p class="info">
+              <span th:text="#{bankid.not-ready}">Not ready yet</span>. 
+            </p>                        
           </div>
         </div>
         
@@ -45,35 +46,7 @@
             </div>
           </div>
         </div> <!-- /#submitDiv -->        
-        
-        <!-- 
-        <div class="providers" id="submitDiv">
-          <div class="row">
-            <div class="col-12">
-              <form method="POST" action="#" th:action="@{/saml2/request}">
-                <input type="hidden" name="debug" th:value="${debug}" />
-                <th:block th:if="${idpList.empty}">
-                  <p class="info">No identity providers are available.</p>
-                </th:block>
-                <th:block th:if="${!idpList.empty}">
-                  <th:block th:each="idpData,idpStat:${idpList}">
-                    <button class="provider-button" type="submit" name="selectedIdp" th:value="${idpData.getEntityID()}">
-                    <div class="provider">                    
-                      <img th:src="@{${idpData.getLogotype()}}"/>
-                      <p th:text='${idpData.getDisplayName()}'>IdP</p>
-                      <th:block th:if="${idpData.getDescription() != null}">
-                        <p class="idp-description" th:text='${idpData.getDescription()}'>Additional text</p>
-                      </th:block>   
-                    </div>
-                    </button>
-                  </th:block>
-                </th:block>
-              </form>
-            </div>
-          </div>  
-        </div>
-        -->        
-        
+                
       </div> <!-- /.col-sm-12 content-container -->
       
       <div th:replace="fragments/footer :: copyright"></div>      

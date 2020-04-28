@@ -25,11 +25,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.client.RestTemplate;
 
 import se.litsec.bankid.rpapi.service.BankIDClient;
-import se.litsec.bankid.rpapi.service.BankIDClientImpl;
 import se.litsec.bankid.rpapi.service.QRGenerator;
+import se.litsec.bankid.rpapi.service.impl.BankIDClientImpl;
+import se.litsec.bankid.rpapi.service.impl.ZxingQRGenerator;
 import se.litsec.bankid.rpapi.support.BankIDRestTemplateFactory;
 import se.litsec.bankid.rpapi.support.KeyStoreFactoryBean;
-import se.litsec.bankid.rpapi.support.ZxingQRGenerator;
 
 /**
  * Configuration class for the BankID demo application.

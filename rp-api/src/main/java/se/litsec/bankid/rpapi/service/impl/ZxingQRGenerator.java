@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.litsec.bankid.rpapi.support;
+package se.litsec.bankid.rpapi.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,17 +43,17 @@ public class ZxingQRGenerator extends AbstractQRGenerator {
 
   /** {@inheritDoc} */
   @Override
-  public byte[] generateQRCodeImage(String autoStartToken, int width, int height, ImageFormat format) throws IOException {
+  public byte[] generateQRCodeImage(final String autoStartToken, final int width, final int height, final ImageFormat format) throws IOException {
     
     if (ImageFormat.SVG.equals(format)) {
       throw new IOException("Image format SVG is not supported by " + this.getClass().getSimpleName());
     }    
     try {
-      String input = this.buildInput(autoStartToken);
+      final String input = this.buildInput(autoStartToken);
       log.debug("Generating QR code in {} format based on {}", format, input);
-      QRCodeWriter writer = new QRCodeWriter();
-      BitMatrix bytes = writer.encode(input, BarcodeFormat.QR_CODE, width, height);
-      ByteArrayOutputStream stream = new ByteArrayOutputStream();
+      final QRCodeWriter writer = new QRCodeWriter();
+      final BitMatrix bytes = writer.encode(input, BarcodeFormat.QR_CODE, width, height);
+      final ByteArrayOutputStream stream = new ByteArrayOutputStream();
       MatrixToImageWriter.writeToStream(bytes, format.getImageFormatName(), stream);
       return stream.toByteArray();
     }
@@ -64,11 +64,10 @@ public class ZxingQRGenerator extends AbstractQRGenerator {
 
   /** {@inheritDoc} */
   @Override
-  public void setDefaultImageFormat(ImageFormat defaultImageFormat) {
+  public void setDefaultImageFormat(final ImageFormat defaultImageFormat) {
     Assert.isTrue(ImageFormat.SVG.equals(defaultImageFormat), 
       "Image format SVG is not supported by " + this.getClass().getSimpleName());
     super.setDefaultImageFormat(defaultImageFormat);
   }
-  
-  
+
 }

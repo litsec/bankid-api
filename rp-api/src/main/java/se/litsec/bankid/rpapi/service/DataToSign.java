@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,17 +40,19 @@ public class DataToSign {
   /**
    * In the BankID sign call, two data sets can be supplied; the {@code userVisibleData} and the
    * {@code userNonVisibleData}. The first text will displayed to the user and the second is not displayed. Both are
-   * Base64-encoded. 
+   * Base64-encoded.
    * <p>
-   * By using this method, the caller can assign the text that will be displayed to the user. The method will take care of Base64-encoding.
+   * By using this method, the caller can assign the text that will be displayed to the user. The method will take care
+   * of Base64-encoding.
    * </p>
    * 
-   * @param displayText the (non-encoded) display text
+   * @param displayText
+   *          the (non-encoded) display text
    */
-  public void setSignatureDisplayText(String displayText) {
+  public void setSignatureDisplayText(final String displayText) {
     this.userVisibleData = Base64.getEncoder().encodeToString(displayText.getBytes(Charset.forName("UTF-8")));
   }
-  
+
   /**
    * Assigns the text to be displayed and signed.
    * <p>
@@ -64,10 +66,10 @@ public class DataToSign {
    * @param userVisibleData
    *          base64-encoded data to be displayed and signed
    */
-  public void setUserVisibleData(String userVisibleData) {
+  public void setUserVisibleData(final String userVisibleData) {
     this.userVisibleData = userVisibleData;
   }
-  
+
   /**
    * Returns the text to be displayed and signed. The returned string is Base64 encoded.
    * 
@@ -79,7 +81,8 @@ public class DataToSign {
   }
 
   /**
-   * Assigns the data that is part of the signature process but should not be displayed to the user. This supplied data is the raw bytes and the method will Base64 encode it.
+   * Assigns the data that is part of the signature process but should not be displayed to the user. This supplied data
+   * is the raw bytes and the method will Base64 encode it.
    * 
    * <p>
    * See also {@link DataToSign#setUserNonVisibleData(String)}.
@@ -88,7 +91,7 @@ public class DataToSign {
    * @param bytes
    *          the data that is part of the signature process but should not be displayed to the user (raw data)
    */
-  public void setUserNonVisibleDataRaw(byte[] bytes) {
+  public void setUserNonVisibleDataRaw(final byte[] bytes) {
     this.userNonVisibleData = Base64.getEncoder().encodeToString(bytes);
   }
 
@@ -104,10 +107,10 @@ public class DataToSign {
    * @param userNonVisibleData
    *          the data that is part of the signature process but should not be displayed to the user (base64-encoded)
    */
-  public void setUserNonVisibleData(String userNonVisibleData) {
+  public void setUserNonVisibleData(final String userNonVisibleData) {
     this.userNonVisibleData = userNonVisibleData;
   }
-  
+
   /**
    * Returns the data that is part of the signature process but should not be displayed to the user.
    * 
@@ -116,7 +119,7 @@ public class DataToSign {
   public String getUserNonVisibleData() {
     return this.userNonVisibleData;
   }
-  
+
   /** {@inheritDoc} */
   @Override
   public String toString() {

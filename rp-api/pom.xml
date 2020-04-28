@@ -45,8 +45,9 @@
     <java.version>1.8</java.version>
 
     <!-- Versions on dependencies -->
-    <spring.version>5.1.2.RELEASE</spring.version>
+    <spring.min.version>5.0.0.RELEASE</spring.min.version>
     <http-client.version>4.5.6</http-client.version>
+    <jackson.version>2.11.0</jackson.version>
     <zxing.versison>3.3.3</zxing.versison>
     <slf4j.version>1.7.25</slf4j.version>
     <junit.version>4.12</junit.version>
@@ -89,25 +90,25 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>${spring.version}</version>
+      <version>[${spring.min.version},)</version>
     </dependency>
     
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>${spring.version}</version>
+      <version>[${spring.min.version},)</version>
     </dependency>
     
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>${spring.version}</version>
+      <version>[${spring.min.version},)</version>
     </dependency>
     
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-      <version>${spring.version}</version>
+      <version>[${spring.min.version},)</version>
     </dependency>
     
     <!-- Optional: Only needed if using the DefaultUserAgent implementation. -->
@@ -121,7 +122,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>${spring.version}</version>
+      <version>[${spring.min.version},)</version>
       <scope>test</scope>
     </dependency>
     
@@ -136,13 +137,13 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>2.9.7</version>
+      <version>${jackson.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.9.7</version>
+      <version>${jackson.version}</version>
     </dependency>
     
     <!-- QR support (optional) -->

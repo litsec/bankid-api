@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.litsec.bankid.rpapi.support;
+package se.litsec.bankid.rpapi.service.impl;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -54,27 +54,29 @@ public abstract class AbstractQRGenerator implements QRGenerator {
    *          the BankID autostart token
    * @return an URI string
    */
-  protected String buildInput(String autoStartToken) {
+  protected String buildInput(final String autoStartToken) {
     return "bankid:///?autostarttoken=" + autoStartToken;
   }
 
   /** {@inheritDoc} */
   @Override
-  public byte[] generateQRCodeImage(String autoStartToken) throws IOException {
+  public byte[] generateQRCodeImage(final String autoStartToken) throws IOException {
     return this.generateQRCodeImage(autoStartToken, this.defaultWidth, this.defaultHeight, this.defaultImageFormat);
   }
 
   /** {@inheritDoc} */
   @Override
-  public String generateQRCodeBase64Image(String autoStartToken, int width, int height, ImageFormat format) throws IOException {
-    byte[] imageBytes = this.generateQRCodeImage(autoStartToken, width, height, format);
-    return String.format("data:image/%s;base64, %s", format.getImageFormatName().toLowerCase(), Base64.getEncoder()
-      .encodeToString(imageBytes));
+  public String generateQRCodeBase64Image(final String autoStartToken, final int width, final int height, final ImageFormat format) 
+      throws IOException {
+    
+    final byte[] imageBytes = this.generateQRCodeImage(autoStartToken, width, height, format);
+    return String.format("data:image/%s;base64, %s", 
+      format.getImageFormatName().toLowerCase(), Base64.getEncoder().encodeToString(imageBytes));
   }
 
   /** {@inheritDoc} */
   @Override
-  public String generateQRCodeBase64Image(String autoStartToken) throws IOException {
+  public String generateQRCodeBase64Image(final String autoStartToken) throws IOException {
     return this.generateQRCodeBase64Image(autoStartToken, this.defaultWidth, this.defaultHeight, this.defaultImageFormat);
   }
 
@@ -87,7 +89,7 @@ public abstract class AbstractQRGenerator implements QRGenerator {
    * @param defaultWidth
    *          default width
    */
-  public void setDefaultWidth(int defaultWidth) {
+  public void setDefaultWidth(final int defaultWidth) {
     this.defaultWidth = defaultWidth;
   }
 
@@ -100,7 +102,7 @@ public abstract class AbstractQRGenerator implements QRGenerator {
    * @param defaultHeight
    *          default height
    */
-  public void setDefaultHeight(int defaultHeight) {
+  public void setDefaultHeight(final int defaultHeight) {
     this.defaultHeight = defaultHeight;
   }
 
@@ -113,7 +115,7 @@ public abstract class AbstractQRGenerator implements QRGenerator {
    * @param defaultImageFormat
    *          the default format
    */
-  public void setDefaultImageFormat(ImageFormat defaultImageFormat) {
+  public void setDefaultImageFormat(final ImageFormat defaultImageFormat) {
     Assert.notNull(defaultImageFormat, "defaultImageFormat must not be null");
     this.defaultImageFormat = defaultImageFormat;
   }

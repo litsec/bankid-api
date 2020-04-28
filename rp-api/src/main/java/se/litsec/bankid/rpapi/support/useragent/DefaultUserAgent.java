@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.litsec.bankid.rpapi.state.impl;
+package se.litsec.bankid.rpapi.support.useragent;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.LiteDeviceResolver;
 import org.springframework.util.Assert;
-
-import se.litsec.bankid.rpapi.state.UserAgent;
-import se.litsec.bankid.rpapi.state.UserDeviceType;
 
 /**
  * Default implementation of the {@link UserAgent} interface. This implementation requires spring-mobile on the
@@ -47,17 +44,17 @@ public class DefaultUserAgent implements UserAgent {
    * @param request
    *          the HTTP servlet request for the user
    */
-  public DefaultUserAgent(HttpServletRequest request) {
+  public DefaultUserAgent(final HttpServletRequest request) {
     Assert.notNull(request, "request must not be null");
     this.request = request;
-    String header = this.request.getHeader("User-Agent");
+    final String header = this.request.getHeader("User-Agent");
     this.userAgentHeader = header != null ? header : "";
   }
 
   /** {@inheritDoc} */
   @Override
   public UserDeviceType getUserDeviceType() {
-    Device device = deviceResolver.resolveDevice(this.request);
+    final Device device = deviceResolver.resolveDevice(this.request);
     if (device.isMobile()) {
       return UserDeviceType.MOBILE;
     }
@@ -84,14 +81,14 @@ public class DefaultUserAgent implements UserAgent {
   /** {@inheritDoc} */
   @Override
   public boolean is_iOS() {
-    String userAgent = this.getUserAgentHeader();
+    final String userAgent = this.getUserAgentHeader();
     return (userAgent.contains("iphone") || userAgent.contains("ipod") || userAgent.contains("ipad"));
   }
 
   /** {@inheritDoc} */
   @Override
   public boolean isNonEmbeddedMobileSafari() {
-    String header = this.getUserAgentHeader();
+    final String header = this.getUserAgentHeader();
     if (header.contains("AppleWebKit") 
         && !(header.contains("CriOS") || header.contains("Chrome")) /* Chrome */
         && !header.contains("FxiOS") /* Firefox */) 
@@ -112,7 +109,7 @@ public class DefaultUserAgent implements UserAgent {
   /** {@inheritDoc} */
   @Override
   public boolean isEmbeddedBrowser() {
-    String header = this.getUserAgentHeader();
+    final String header = this.getUserAgentHeader();
     if (header.contains("GSA")) {
       // Google Search App
       return true;

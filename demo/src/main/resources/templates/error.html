@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/base :: headerFragment">
-  <title id="pageTitle" th:inline="text">[[#{sp.msg.title}]]</title>
+  <title id="pageTitle" th:inline="text">[[#{bankid.msg.title}]]</title>
 </head>
 <body>
 
@@ -18,7 +18,7 @@
 
           <div class="row">
             <div class="col-sm-12 content-heading">
-              <h2 th:text="#{sp.msg.error-heading}">Error</h2>
+              <h2 th:text="#{bankid.msg.error-heading}">Error</h2>
             </div>
             <div class="col-sm-12">
               <p th:text="#{${messageCode}}">Error message</p>
@@ -33,7 +33,7 @@
       
       <div class="row section" id="backDiv">
         <div class="col-sm-12 return">
-          <a href="#" th:href="@{/}"><span th:text="#{sp.msg.tryagain-button}">Try again</span></a>
+          <a href="#" th:href="@{/}"><span th:text="#{bankid.button.tryagain}">Try again</span></a>
         </div>
       </div> <!-- /#backDiv -->      
       

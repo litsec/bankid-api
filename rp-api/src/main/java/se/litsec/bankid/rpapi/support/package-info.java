@@ -1,4 +1,4 @@
 /**
- * Contains support interfaces and implementations for BankID operations. 
+ * Contains support implementations for BankID operations. 
  */
 package se.litsec.bankid.rpapi.support;

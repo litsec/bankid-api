@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.litsec.bankid.rpapi.state;
+package se.litsec.bankid.rpapi.support.useragent;
 
 /**
- * An interface for representing the user agent information.
+ * An interface for representing user agent information.
  * 
  * @author Martin Lindström (martin@litsec.se)
  */
@@ -46,18 +46,19 @@ public interface UserAgent {
   /**
    * Predicate that indicates if the "User-Agent" header indicates if the platform is iOS.
    *
-   * @return if the "User-Agent" header indicates iOS {@code true} is returned, and otherwise {@code false}.
+   * @return if the "User-Agent" header indicates iOS true is returned, and otherwise false.
    */
   boolean is_iOS();
 
   /**
-   * Predicate that indicates if the "User-Agent" header indicates the Safari mobile web browser (not embedded in another app).
+   * Predicate that indicates if the "User-Agent" header indicates the Safari mobile web browser (not embedded in
+   * another app).
    * <p>
    * The reason that we need special handling of iOS and Safari is that the BankID app needs to be started with an extra
    * parameter for those cases.
    * </p>
    * 
-   * @return {@code true} if the "User-Agent" header indicates that Safari is used and {@code false} otherwise
+   * @return true if the "User-Agent" header indicates that Safari is used and false otherwise
    */
   boolean isNonEmbeddedMobileSafari();
 
@@ -67,8 +68,7 @@ public interface UserAgent {
    * pretty unknown to the major apps, so in those cases we need to ask the user to manually start the app. This
    * predicate checks if the "User-Agent" header indicates that an embedded browser is in use.
    * 
-   * @return {@code true} if the "User-Agent" header indicates that an embedded browser is used and {@code false}
-   *         otherwise
+   * @return true if the "User-Agent" header indicates that an embedded browser is used and false otherwise
    */
   boolean isEmbeddedBrowser();
 }

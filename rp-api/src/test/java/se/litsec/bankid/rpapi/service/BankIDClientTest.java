@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.support.RestGatewaySupport;
 
+import se.litsec.bankid.rpapi.service.impl.BankIDClientImpl;
 import se.litsec.bankid.rpapi.types.OrderResponse;
 
 /**
@@ -59,7 +60,7 @@ public class BankIDClientTest {
     
     this.mockServer.expect(MockRestRequestMatchers.requestTo(BANKID_URL + "/auth"))
       .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-      .andExpect(MockRestRequestMatchers.header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE))
+      .andExpect(MockRestRequestMatchers.header("Content-Type", MediaType.APPLICATION_JSON_VALUE))
       .andRespond(MockRestResponseCreators.withSuccess(responseBytes, MediaType.APPLICATION_JSON));
     
     OrderResponse response = this.client.authenticate("196911292032", "85.228.133.223", null);

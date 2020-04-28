@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public interface QRGenerator {
    *           for errors during generation
    * @see #generateQRCodeImage(String)
    */
-  byte[] generateQRCodeImage(String autoStartToken, int width, int height, ImageFormat format) throws IOException;
+  byte[] generateQRCodeImage(final String autoStartToken, final int width, final int height, final ImageFormat format) throws IOException;
 
   /**
    * Generates a QR code image using default settings for width, height and the image format.
@@ -59,7 +59,7 @@ public interface QRGenerator {
    *           for errors during generation
    * @see #generateQRCodeImage(String, int, int, ImageFormat)
    */
-  byte[] generateQRCodeImage(String autoStartToken) throws IOException;
+  byte[] generateQRCodeImage(final String autoStartToken) throws IOException;
 
   /**
    * Generates a QR code image as a Base64 encoded image.
@@ -97,7 +97,7 @@ public interface QRGenerator {
    *           for errors during generation
    * @see #generateQRCodeBase64Image(String)
    */
-  String generateQRCodeBase64Image(String autoStartToken, int width, int height, ImageFormat format) throws IOException;
+  String generateQRCodeBase64Image(final String autoStartToken, final int width, final int height, final ImageFormat format) throws IOException;
 
   /**
    * Generates a QR code image as a Base64 encoded image using default settings for width, height and the image format.
@@ -109,7 +109,7 @@ public interface QRGenerator {
    *           for errors during generation
    * @see #generateQRCodeBase64Image(String, int, int, ImageFormat)
    */
-  String generateQRCodeBase64Image(String autoStartToken) throws IOException;
+  String generateQRCodeBase64Image(final String autoStartToken) throws IOException;
 
   /**
    * Enum representing an image format.
@@ -131,7 +131,7 @@ public interface QRGenerator {
      * 
      * @param formatName
      *          the string to parse
-     * @return an {@code ImageFormat} or {@code null} if there is no matching format
+     * @return an ImageFormat or null if there is no matching format
      */
     public static ImageFormat parse(String formatName) {
       for (ImageFormat i : ImageFormat.values()) {

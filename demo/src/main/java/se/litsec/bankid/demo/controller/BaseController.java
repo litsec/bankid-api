@@ -44,7 +44,7 @@ public class BaseController {
    *          the model
    */
   @ModelAttribute
-  public void addUiLanguages(Model model) {
+  public void addUiLanguages(final Model model) {
     Locale locale = LocaleContextHolder.getLocale();
 
     model.addAttribute("languages", this.languages.stream()

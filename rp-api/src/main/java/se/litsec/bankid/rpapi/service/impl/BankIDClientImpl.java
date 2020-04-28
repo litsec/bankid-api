@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.litsec.bankid.rpapi.service;
+package se.litsec.bankid.rpapi.service.impl;
 
 import java.io.IOException;
 import java.net.URI;
@@ -31,6 +31,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import se.litsec.bankid.rpapi.service.BankIDClient;
+import se.litsec.bankid.rpapi.service.DataToSign;
+import se.litsec.bankid.rpapi.service.QRGenerator;
 import se.litsec.bankid.rpapi.types.BankIDException;
 import se.litsec.bankid.rpapi.types.CollectResponse;
 import se.litsec.bankid.rpapi.types.CollectResponseJson;
@@ -81,13 +84,13 @@ public class BankIDClientImpl implements BankIDClient {
    * @param qrGenerator
    *          the QR code generator (may be {@code null} if QR codes are not used)
    */
-  public BankIDClientImpl(RestTemplate restTemplate, String serviceUrl, QRGenerator qrGenerator) {
+  public BankIDClientImpl(final RestTemplate restTemplate, final String serviceUrl, final QRGenerator qrGenerator) {
     Assert.notNull(restTemplate, "'restTemplate' must be not be null");
     this.restTemplate = restTemplate;
     Assert.hasText(serviceUrl, "'serviceUrl' must not be null or empty");
     this.qrGenerator = qrGenerator;
     
-    UriBuilderFactory uriFactory = new DefaultUriBuilderFactory(serviceUrl);
+    final UriBuilderFactory uriFactory = new DefaultUriBuilderFactory(serviceUrl);
     this.authUri = uriFactory.builder().path("/auth").build();
     this.signUri = uriFactory.builder().path("/sign").build();
     this.cancelUri = uriFactory.builder().path("/cancel").build();
@@ -96,18 +99,18 @@ public class BankIDClientImpl implements BankIDClient {
 
   /** {@inheritDoc} */
   @Override
-  public OrderResponse authenticate(String personalIdentityNumber, String endUserIp, Requirement requirement)
+  public OrderResponse authenticate(final String personalIdentityNumber, final String endUserIp, final Requirement requirement)
       throws BankIDException {
 
     Assert.hasText(endUserIp, "'endUserIp' must not be null or empty");
 
     // Set up the request data.
     //
-    AuthnRequest request = new AuthnRequest(personalIdentityNumber, endUserIp, requirement);
+    final AuthnRequest request = new AuthnRequest(personalIdentityNumber, endUserIp, requirement);
     log.debug("authenticate. request: [{}] [uri: {}]", request, this.authUri);
 
     try {
-      OrderResponse response = this.restTemplate.postForObject(this.authUri, request, OrderResponse.class);
+      final OrderResponse response = this.restTemplate.postForObject(this.authUri, request, OrderResponse.class);
       log.info("authenticate. response: [{}]", response);
       return response;
     }
@@ -123,18 +126,18 @@ public class BankIDClientImpl implements BankIDClient {
 
   /** {@inheritDoc} */
   @Override
-  public OrderResponse sign(String personalIdentityNumber, String endUserIp, DataToSign dataToSign, Requirement requirement)
-      throws BankIDException {
+  public OrderResponse sign(final String personalIdentityNumber, final String endUserIp,
+      final DataToSign dataToSign, final Requirement requirement) throws BankIDException {
 
     Assert.hasText(endUserIp, "'endUserIp' must not be null or empty");
     Assert.notNull(dataToSign, "'dataToSign' must not be null");
     Assert.hasText(dataToSign.getUserVisibleData(), "'dataToSign.userVisibleData' must not be null");
 
-    SignRequest request = new SignRequest(personalIdentityNumber, endUserIp, requirement, dataToSign);
+    final SignRequest request = new SignRequest(personalIdentityNumber, endUserIp, requirement, dataToSign);
     log.debug("sign. request: [{}] [uri: {}]", request, this.authUri);
 
     try {
-      OrderResponse response = this.restTemplate.postForObject(this.signUri, request, OrderResponse.class);
+      final OrderResponse response = this.restTemplate.postForObject(this.signUri, request, OrderResponse.class);
       log.info("sign. response: [{}]", response);
       return response;
     }
@@ -150,12 +153,12 @@ public class BankIDClientImpl implements BankIDClient {
 
   /** {@inheritDoc} */
   @Override
-  public void cancel(String orderReference) throws BankIDException {
+  public void cancel(final String orderReference) throws BankIDException {
     Assert.hasText(orderReference, "'orderReference' must not be null or empty");
 
     log.debug("cancel: Request for cancelling order {}", orderReference);
 
-    OrderRefRequest request = new OrderRefRequest(orderReference);
+    final OrderRefRequest request = new OrderRefRequest(orderReference);
 
     try {
       this.restTemplate.postForObject(this.cancelUri, request, Void.class);
@@ -178,7 +181,7 @@ public class BankIDClientImpl implements BankIDClient {
 
     log.debug("collect: Request for collecting order {}", orderReference);
 
-    OrderRefRequest request = new OrderRefRequest(orderReference);
+    final OrderRefRequest request = new OrderRefRequest(orderReference);
     try {
       CollectResponseJson response = this.restTemplate.postForObject(this.collectUri, request, CollectResponseJson.class);
       log.info("collect. response: [{}]", response);
@@ -211,10 +214,10 @@ public class BankIDClientImpl implements BankIDClient {
    * 
    * @param exception
    *          the exception
-   * @return an {@code ErrorResponse}
+   * @return an ErrorResponse
    */
-  private ErrorResponse getErrorResponse(HttpStatusCodeException exception) {
-    byte[] body = exception.getResponseBodyAsByteArray();
+  private ErrorResponse getErrorResponse(final HttpStatusCodeException exception) {
+    final byte[] body = exception.getResponseBodyAsByteArray();
     if (body == null) {
       return new ErrorResponse(ErrorCode.UNKNOWN_ERROR, null);
     }
@@ -228,17 +231,17 @@ public class BankIDClientImpl implements BankIDClient {
   }
 
   /**
-   * Represents the data sent in a /auth call.
+   * Represents the data sent in an /auth call.
    */
   @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
   @JsonInclude(Include.NON_NULL)
   private static class AuthnRequest {
 
-    private String personalNumber;
-    private String endUserIp;
-    private Requirement requirement;
+    private final String personalNumber;
+    private final String endUserIp;
+    private final Requirement requirement;
 
-    public AuthnRequest(String personalNumber, String endUserIp, Requirement requirement) {
+    public AuthnRequest(final String personalNumber, final String endUserIp, final Requirement requirement) {
       this.personalNumber = personalNumber;
       this.endUserIp = endUserIp;
       this.requirement = requirement;
@@ -250,14 +253,17 @@ public class BankIDClientImpl implements BankIDClient {
     }
   }
 
+  /**
+   * Represents the data sent in a /sign call.
+   */
   @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
   @JsonInclude(Include.NON_NULL)
   private static class SignRequest extends AuthnRequest {
 
-    private String userVisibleData;
-    private String userNonVisibleData;
+    private final String userVisibleData;
+    private final String userNonVisibleData;
 
-    public SignRequest(String personalNumber, String endUserIp, Requirement requirement, DataToSign dataToSign) {
+    public SignRequest(final String personalNumber, final String endUserIp, final Requirement requirement, final DataToSign dataToSign) {
       super(personalNumber, endUserIp, requirement);
       this.userVisibleData = dataToSign.getUserVisibleData();
       this.userNonVisibleData = dataToSign.getUserNonVisibleData();
@@ -271,15 +277,17 @@ public class BankIDClientImpl implements BankIDClient {
 
   }
 
+  /**
+   * Represents the data sent in /collect and /cancel calls.
+   */
   @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
   private static class OrderRefRequest {
     @SuppressWarnings("unused")
-    private String orderRef;
+    private final String orderRef;
 
-    public OrderRefRequest(String orderRef) {
+    public OrderRefRequest(final String orderRef) {
       this.orderRef = orderRef;
     }
-
   }
 
 }

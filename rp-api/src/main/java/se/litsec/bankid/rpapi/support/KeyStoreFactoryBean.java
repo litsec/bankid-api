@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class KeyStoreFactoryBean extends AbstractFactoryBean<KeyStore> {
    * @param storePassword
    *          the password for unlocking the keystore
    */
-  public KeyStoreFactoryBean(Resource keyStoreResource, char[] keyStorePassword) {
+  public KeyStoreFactoryBean(final Resource keyStoreResource, final char[] keyStorePassword) {
     this(keyStoreResource, keyStorePassword, KeyStore.getDefaultType());
   }
 
@@ -60,16 +60,18 @@ public class KeyStoreFactoryBean extends AbstractFactoryBean<KeyStore> {
    * @param storeType
    *          the type of keystore
    */
-  public KeyStoreFactoryBean(Resource keyStoreResource, char[] keyStorePassword, String keyStoreType) {
+  public KeyStoreFactoryBean(final Resource keyStoreResource, final char[] keyStorePassword, final String keyStoreType) {
     Assert.notNull(keyStoreResource, "'keyStoreResource' must not be null");
-    if (keyStorePassword == null) {
-      // Assume empty password
-      keyStorePassword = new char[0];
-    }
     Assert.hasText(keyStoreType, "'keyStoreType' must not be null or empty");
     this.keyStoreResource = keyStoreResource;
-    this.keyStorePassword = new char[keyStorePassword.length];
-    System.arraycopy(keyStorePassword, 0, this.keyStorePassword, 0, this.keyStorePassword.length);
+    if (keyStorePassword != null) {
+      this.keyStorePassword = new char[keyStorePassword.length];
+      System.arraycopy(keyStorePassword, 0, this.keyStorePassword, 0, this.keyStorePassword.length);
+    }
+    else {
+      // Assume empty password
+      this.keyStorePassword = new char[0];
+    }
     this.keyStoreType = keyStoreType;
   }
 
@@ -81,7 +83,7 @@ public class KeyStoreFactoryBean extends AbstractFactoryBean<KeyStore> {
   /** {@inheritDoc} */
   @Override
   protected KeyStore createInstance() throws Exception {
-    KeyStore keyStore = KeyStore.getInstance(this.keyStoreType);
+    final KeyStore keyStore = KeyStore.getInstance(this.keyStoreType);
     keyStore.load(this.keyStoreResource.getInputStream(), this.keyStorePassword);
     return keyStore;
   }

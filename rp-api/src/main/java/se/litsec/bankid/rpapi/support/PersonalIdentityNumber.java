@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,10 +95,10 @@ public class PersonalIdentityNumber implements Serializable {
    * @throws PersonalIdentityNumberException
    *           if the supplied number is not valid
    */
-  public PersonalIdentityNumber(String number) throws PersonalIdentityNumberException {
+  public PersonalIdentityNumber(final String number) throws PersonalIdentityNumberException {
     Assert.notNull(number, "number must not be null");
 
-    Matcher matcher = pattern.matcher(number.trim());
+    final Matcher matcher = pattern.matcher(number.trim());
     if (!matcher.find()) {
       throw new PersonalIdentityNumberException("Invalid format of personal identity number");
     }
@@ -119,14 +119,14 @@ public class PersonalIdentityNumber implements Serializable {
 
       // OK, we have the complete birth date. Let's check if it is a valid date ...
       //
-      Calendar cal = Calendar.getInstance();
+      final Calendar cal = Calendar.getInstance();
       cal.setLenient(false);
       cal.set(this.century * 100 + this.year, this.month - 1, this.date > 60 ? this.date - 60 : this.date);
       try {
         cal.getTime();
       }
       catch (Exception e) {
-        String msg = this.date > 60 ? "Invalid samordningsnummer" : "Invalid birth date";
+        final String msg = this.date > 60 ? "Invalid samordningsnummer" : "Invalid birth date";
         throw new PersonalIdentityNumberException(String.format("%s - %02d%02d%02d%02d",
           msg, this.century, this.year, this.month, this.date));
       }
@@ -137,7 +137,7 @@ public class PersonalIdentityNumber implements Serializable {
 
       // Validate the control digit
       //
-      int luhn = calculateLuhn(this.getNumber(Format.TEN_DIGITS_NO_DELIMITER).substring(0, 9));
+      final int luhn = calculateLuhn(this.getNumber(Format.TEN_DIGITS_NO_DELIMITER).substring(0, 9));
       if (luhn != this.controlDigit) {
         throw new PersonalIdentityNumberException("Invalid personal identity number - control digit is incorrect");
       }
@@ -158,7 +158,7 @@ public class PersonalIdentityNumber implements Serializable {
    *           if the supplied number is not valid
    */
   @JsonCreator
-  public static PersonalIdentityNumber parse(String number) throws PersonalIdentityNumberException {
+  public static PersonalIdentityNumber parse(final String number) throws PersonalIdentityNumberException {
     return new PersonalIdentityNumber(number);
   }
 
@@ -179,7 +179,7 @@ public class PersonalIdentityNumber implements Serializable {
    *          the required format for the personal identity number string
    * @return personal identity number string
    */
-  public String getNumber(Format format) {
+  public String getNumber(final Format format) {
     if (format == Format.TWELVE_DIGITS_NO_DELIMITER) {
       return String.format("%02d%02d%02d%02d%03d%d", this.century, this.year, this.month, this.date, this.birthNumber, this.controlDigit);
     }
@@ -224,7 +224,7 @@ public class PersonalIdentityNumber implements Serializable {
    * @throws NumberFormatException
    *           for illegal numbers (should not happen since the regex matched)
    */
-  private void processYear(String centuryDigits, String yearDigits, String delimeter) throws NumberFormatException {
+  private void processYear(final String centuryDigits, final String yearDigits, final String delimeter) throws NumberFormatException {
     this.year = Integer.parseInt(yearDigits);
     if (centuryDigits == null) {
       // If delimiter is "+" the person is 100 or over, if it is "-" he or she is under 100,

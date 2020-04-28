@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.litsec.bankid.rpapi.state;
+package se.litsec.bankid.rpapi.support.useragent;
 
 /**
- * Before the BankID app can be automatically started a launch URL needs to be created. This state handles this. The
- * rules described in chapter 3 of the BankID Relying Party Guidelines are followed.
+ * Represents the user device type that is being used.
  * 
  * @author Martin Lindström (martin@litsec.se)
  */
-public interface InitiateAutoStartState extends BankIDState<RedirectUrlCallbackInput> {
+public enum UserDeviceType {
 
-  /**
-   * Returns {@code false}. This is not an end state.
-   */
-  @Override
-  default boolean isEndState() {
-    return false;
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  default String getStateName() {
-    return "initiate-auto-start-state";
-  }
+  /** A mobile phone. */
+  MOBILE,
+  
+  /** A tablet. */
+  TABLET,
+  
+  /** A desktop computer. */
+  DESKTOP;
 
 }

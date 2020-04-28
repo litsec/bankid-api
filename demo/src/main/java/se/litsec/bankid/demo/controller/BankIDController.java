@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * Main controller.
  * 
- * @author Martin Lindström (martin.lindstrom@idsec.se)
+ * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
 @Controller
 @RequestMapping("/")
@@ -45,7 +45,7 @@ public class BankIDController extends BaseController {
    * @return a model and view object
    */
   @GetMapping
-  public ModelAndView home(Device device, @RequestParam(value = "debug", required = false, defaultValue = "false") Boolean debug) {
+  public ModelAndView home(final Device device, @RequestParam(value = "debug", required = false, defaultValue = "false") Boolean debug) {
     ModelAndView mav = new ModelAndView("home");
     mav.addObject("debug", debug);
 
@@ -103,8 +103,8 @@ public class BankIDController extends BaseController {
   }
 
   @PostMapping("/startOther")
-  public ModelAndView startOther(@RequestParam("action") String action,
-      @RequestParam(value = "personalIdNumber", required = false) String personalIdNumber) {
+  public ModelAndView startOther(@RequestParam("action") final String action,
+      @RequestParam(value = "personalIdNumber", required = false) final String personalIdNumber) {
 
     if ("personalId".equals(action)) {
       if (personalIdNumber == null) {
@@ -118,29 +118,5 @@ public class BankIDController extends BaseController {
       return new ModelAndView("home");
     }
   }
-
-  /**
-   * Displays the result of an authentication.
-   * 
-   * @param request
-   *          the HTTP request
-   * @param response
-   *          the HTTP response
-   * @return a model and view object
-   * @throws ApplicationException
-   *           for
-   */
-  // @GetMapping("/result")
-  // public ModelAndView displayResult(HttpServletRequest request, HttpServletResponse response) {
-  //
-  // HttpSession session = request.getSession();
-  // ModelAndView mav = (ModelAndView) session.getAttribute("sp-result");
-  // if (mav == null) {
-  // log.warn("No session for user, directing to start page [client-ip-address='{}']", request.getRemoteAddr());
-  // return new ModelAndView("redirect:/");
-  // }
-  //
-  // return mav;
-  // }
 
 }
