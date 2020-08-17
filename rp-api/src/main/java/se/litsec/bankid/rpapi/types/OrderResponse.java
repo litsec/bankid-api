@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
  */
 package se.litsec.bankid.rpapi.types;
 
+import java.time.Instant;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,6 +37,21 @@ public class OrderResponse {
   @JsonProperty(value = "autoStartToken")
   private String autoStartToken;
 
+  /** Used to compute an animated QR code. */
+  @JsonProperty(value = "qrStartToken")
+  private String qrStartToken;
+
+  /** Used to compute an animated QR code. */
+  @JsonProperty(value = "qrStartSecret")
+  private String qrStartSecret;
+
+  /**
+   * The orderTime property is used when generating "animated" QR codes. The property is instantiated with the current
+   * time when the object is created.
+   */
+  @JsonIgnore
+  private final Instant orderTime = Instant.now();
+
   /**
    * Returns the order reference string.
    * 
@@ -49,7 +67,7 @@ public class OrderResponse {
    * @param orderReference
    *          the order reference
    */
-  public void setOrderReference(String orderReference) {
+  public void setOrderReference(final String orderReference) {
     this.orderReference = orderReference;
   }
 
@@ -68,14 +86,75 @@ public class OrderResponse {
    * @param autoStartToken
    *          the auto start token
    */
-  public void setAutoStartToken(String autoStartToken) {
+  public void setAutoStartToken(final String autoStartToken) {
     this.autoStartToken = autoStartToken;
+  }
+
+  /**
+   * Gets the QR start token used to compute an animated QR code.
+   * <p>
+   * Available for BankID RP API v5.1 and later.
+   * </p>
+   * 
+   * @return QR start token, or null if not available (pre v5.1)
+   */
+  public String getQrStartToken() {
+    return this.qrStartToken;
+  }
+
+  /**
+   * Assigns the QR start token used to compute an animated QR code.
+   * <p>
+   * Available for BankID RP API v5.1 and later.
+   * </p>
+   * 
+   * @param qrStartToken
+   *          the QR start token
+   */
+  public void setQrStartToken(final String qrStartToken) {
+    this.qrStartToken = qrStartToken;
+  }
+
+  /**
+   * Gets the QR start secret string.
+   * <p>
+   * Available for BankID RP API v5.1 and later.
+   * </p>
+   * 
+   * @return the QR start secrret, or null if not available (pre v5.1)
+   */
+  public String getQrStartSecret() {
+    return this.qrStartSecret;
+  }
+
+  /**
+   * Assigns the QR start secret string.
+   * <p>
+   * Available for BankID RP API v5.1 and later.
+   * </p>
+   * 
+   * @param qrStartSecret
+   *          the QR start secret string
+   */
+  public void setQrStartSecret(final String qrStartSecret) {
+    this.qrStartSecret = qrStartSecret;
+  }
+
+  /**
+   * Gets the orderTime property that is used when generating "animated" QR codes. The property is instantiated with the
+   * current time when the object is created.
+   * 
+   * @return the instant when the response object was instantited
+   */
+  public Instant getOrderTime() {
+    return this.orderTime;
   }
 
   /** {@inheritDoc} */
   @Override
   public String toString() {
-    return String.format("orderRef='%s', autoStartToken='%s'", this.orderReference, this.autoStartToken);
+    return String.format("orderRef='%s', autoStartToken='%s', qrStartToken='%s', qrStartSecret='%s', orderTime='%s'",
+      this.orderReference, this.autoStartToken, this.qrStartToken, this.qrStartSecret, this.orderTime.toString());
   }
 
 }

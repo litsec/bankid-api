@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,13 +87,19 @@ public class Requirement {
   private List<String> issuerCn;
 
   /**
-   * Tells whether the client must have been started using the autoStartToken. A little bit of bad design is that its
-   * value can only be {@code TRUE} or not set at all.
+   * Tells whether the client must have been started using the autoStartToken. Deprecated: For v5.1, use
+   * {@code tokenStartRequired}.
    */
   private Boolean autoStartTokenRequired;
 
   /** Tells whether finger print use should be allowed. */
   private Boolean allowFingerprint;
+
+  /**
+   * In BankID RP API v5.1 this replaces autoStartTokenRequired. Tells whether the client must have been started using
+   * the autoStartToken.
+   */
+  private Boolean tokenStartRequired;
 
   /**
    * Creates a {@code RequirementBuilder}.
@@ -107,10 +113,10 @@ public class Requirement {
   /**
    * Predicate that tells whether this object is "empty", meaning that no properties have been assigned.
    * 
-   * @return {@code true} if not properties have been assigned, and {@code false} otherwise
+   * @return true if not properties have been assigned, and false otherwise
    */
   public boolean isEmpty() {
-    return this.cardReader == null && this.autoStartTokenRequired == null
+    return this.cardReader == null && this.autoStartTokenRequired == null && this.tokenStartRequired == null
         && (this.certificatePolicies == null || this.certificatePolicies.isEmpty())
         && this.issuerCn == null && this.allowFingerprint == null;
   }
@@ -118,7 +124,7 @@ public class Requirement {
   /**
    * Returns the requirement for which type of smart card reader that is required.
    * 
-   * @return the card reader requirement, or {@code null}
+   * @return the card reader requirement, or null
    */
   public CardReaderRequirement getCardReader() {
     return this.cardReader;
@@ -134,7 +140,7 @@ public class Requirement {
    * @param cardReader
    *          the card reader requirement
    */
-  public void setCardReader(CardReaderRequirement cardReader) {
+  public void setCardReader(final CardReaderRequirement cardReader) {
     this.cardReader = cardReader;
   }
 
@@ -156,7 +162,7 @@ public class Requirement {
    * @param certificatePolicies
    *          a list of certificate policy object identifiers
    */
-  public void setCertificatePolicies(List<String> certificatePolicies) {
+  public void setCertificatePolicies(final List<String> certificatePolicies) {
     this.certificatePolicies = certificatePolicies;
   }
 
@@ -179,7 +185,7 @@ public class Requirement {
    * @param issuerCn
    *          a list of CN strings
    */
-  public void setIssuerCn(List<String> issuerCn) {
+  public void setIssuerCn(final List<String> issuerCn) {
     this.issuerCn = issuerCn;
   }
 
@@ -187,8 +193,10 @@ public class Requirement {
    * Returns the {@code autoStartTokenRequired} flag that is used to determine whether the client must have been started
    * using the autoStartToken.
    * 
-   * @return {@code Boolean.TRUE} or {@code null} (never {@code FALSE})
+   * @return {@value Boolean#TRUE}, {@value Boolean#FALSE} or null (never FALSE prior to v5)
+   * @deprecated if v5.1 or later of the BankID RP is used, the {@link #getTokenStartRequired()} should be used
    */
+  @Deprecated
   public Boolean getAutoStartTokenRequired() {
     return this.autoStartTokenRequired;
   }
@@ -196,15 +204,13 @@ public class Requirement {
   /**
    * Assigns the {@code autoStartTokenRequired} flag that is used to determine whether the client must have been started
    * using the autoStartToken.
-   * <p>
-   * A little bit of bad design is that its value can only be {@code TRUE} or not set at all. Therefore, if the supplied
-   * parameter is {@code FALSE}, the value will be un-set.
-   * </p>
    * 
    * @param autoStartTokenRequired
    *          the auto start flag
+   * @deprecated if v5.1 or later of the BankID RP is used, the {@link #setTokenStartRequired(Boolean)} should be used
    */
-  public void setAutoStartTokenRequired(Boolean autoStartTokenRequired) {
+  @Deprecated
+  public void setAutoStartTokenRequired(final Boolean autoStartTokenRequired) {
     if (autoStartTokenRequired != null && !autoStartTokenRequired.booleanValue()) {
       this.autoStartTokenRequired = null;
     }
@@ -220,7 +226,7 @@ public class Requirement {
    * signature.
    * </p>
    * 
-   * @return the {@code allowFingerprint} flag or {@code null} for default behaviuor
+   * @return the allowFingerprint flag or null for default behaviuor
    */
   public Boolean getAllowFingerprint() {
     return this.allowFingerprint;
@@ -229,25 +235,47 @@ public class Requirement {
   /**
    * Assigns the {@code allowFingerprint} flag telling whether finger print use should be allowed.
    * <p>
-   * For default behaviour, this method need to be invoked.
+   * For default behaviour, this method does not have tobe invoked.
    * </p>
    * 
    * @param allowFingerprint
-   *          the {@code allowFingerprint} flag
+   *          the allowFingerprint flag
    */
-  public void setAllowFingerprint(Boolean allowFingerprint) {
+  public void setAllowFingerprint(final Boolean allowFingerprint) {
     this.allowFingerprint = allowFingerprint;
+  }
+
+  /**
+   * Returns the {@code tokenStartRequired} flag that is used to determine whether the client must have been started
+   * using the autoStartToken.
+   * 
+   * @return a boolean telling whether token start is required (null means FALSE)
+   */
+  public Boolean getTokenStartRequired() {
+    return this.tokenStartRequired;
+  }
+
+  /**
+   * Assigns the {@code tokenStartRequired} flag that is used to determine whether the client must have been started
+   * using the autoStartToken.
+   * 
+   * @param tokenStartRequired
+   *          whether token start is required
+   */
+  public void setTokenStartRequired(final Boolean tokenStartRequired) {
+    this.tokenStartRequired = tokenStartRequired;
   }
 
   /** {@inheritDoc} */
   @Override
   public String toString() {
-    return String.format("cardReader=%s, certificatePolicies=%s, issuerCn=%s, autoStartTokenRequired=%s, allowFingerprint=%s",
+    return String.format("cardReader=%s, certificatePolicies=%s, issuerCn=%s, autoStartTokenRequired=%s, allowFingerprint=%s, tokenStartRequired=%s",
       this.cardReader != null ? this.cardReader : "<not set>",
       this.certificatePolicies != null ? this.certificatePolicies : "<not set - defaults apply>",
       this.issuerCn != null ? this.issuerCn : "<not set - defaults apply>",
       this.autoStartTokenRequired != null ? this.autoStartTokenRequired : "<not set>",
-      this.allowFingerprint != null ? this.allowFingerprint : "<not set>");
+      this.allowFingerprint != null ? this.allowFingerprint : "<not set>",
+      this.tokenStartRequired != null ? this.tokenStartRequired : "<not set>");
   }
 
   /**
@@ -286,7 +314,7 @@ public class Requirement {
      * @param requirement
      *          the object to initialize the builder from
      */
-    public RequirementBuilder(Requirement requirement) {
+    public RequirementBuilder(final Requirement requirement) {
       this();
       if (requirement == null) {
         return;
@@ -304,16 +332,15 @@ public class Requirement {
       }
       this.requirement.setCardReader(requirement.getCardReader());
       this.requirement.setAllowFingerprint(requirement.getAllowFingerprint());
-      if (requirement.getAutoStartTokenRequired() != null && requirement.getAutoStartTokenRequired().booleanValue()) {
-        this.requirement.setAutoStartTokenRequired(Boolean.TRUE);
-      }
+      this.requirement.setAutoStartTokenRequired(requirement.getAutoStartTokenRequired());
+      this.requirement.setTokenStartRequired(requirement.getTokenStartRequired());
       this.requirement.setIssuerCn(requirement.getIssuerCn());
     }
 
     /**
      * Returns the built {@code Requirement} object
      * 
-     * @return a {@code Requirement} object
+     * @return a Requirement object
      */
     public Requirement build() {
 
@@ -366,10 +393,10 @@ public class Requirement {
      * Tells whether we are setting up the requirement for a production system.
      * 
      * @param production
-     *          {@code true} for production and {@code false} for test
+     *          true for production and false for test
      * @return the builder
      */
-    public RequirementBuilder productionSetup(boolean production) {
+    public RequirementBuilder productionSetup(final boolean production) {
       this.productionSetup = production;
       return this;
     }
@@ -385,7 +412,7 @@ public class Requirement {
      *          the card reader requirement
      * @return the builder
      */
-    public RequirementBuilder cardReader(CardReaderRequirement cardReaderRequirement) {
+    public RequirementBuilder cardReader(final CardReaderRequirement cardReaderRequirement) {
       this.requirement.setCardReader(cardReaderRequirement);
       return this;
     }
@@ -398,7 +425,9 @@ public class Requirement {
      * </p>
      * 
      * @return the builder
+     * @deprecated for BankID RP API v5.1 use {@link #tokenStartRequired()}
      */
+    @Deprecated
     public RequirementBuilder autoStartTokenRequired() {
       this.requirement.setAutoStartTokenRequired(Boolean.TRUE);
       return this;
@@ -415,8 +444,22 @@ public class Requirement {
      *          the allowFingerprint flag
      * @return the builder
      */
-    public RequirementBuilder allowFingerprint(boolean allowFingerprint) {
+    public RequirementBuilder allowFingerprint(final boolean allowFingerprint) {
       this.requirement.setAllowFingerprint(allowFingerprint);
+      return this;
+    }
+    
+    /**
+     * Tells that the client must have been started using the autoStartToken.
+     * 
+     * <p>
+     * See {@link Requirement#setTokenStartRequired(Boolean)}.
+     * </p>
+     * 
+     * @return the builder
+     */
+    public RequirementBuilder tokenStartRequired() {
+      this.requirement.setTokenStartRequired(Boolean.TRUE);
       return this;
     }
 
@@ -431,7 +474,7 @@ public class Requirement {
      *          should Mobile BankID be enabled or disabled?
      * @return the builder
      */
-    public RequirementBuilder mobile(boolean enable) {
+    public RequirementBuilder mobile(final boolean enable) {
       this.enableMobile = enable;
       return this;
     }
@@ -447,7 +490,7 @@ public class Requirement {
      *          should BankID on file be enabled or disabled?
      * @return the builder
      */
-    public RequirementBuilder onFile(boolean enable) {
+    public RequirementBuilder onFile(final boolean enable) {
       this.enableOnFile = enable;
       return this;
     }
@@ -463,7 +506,7 @@ public class Requirement {
      *          should BankID on smart card be enabled or disabled?
      * @return the builder
      */
-    public RequirementBuilder onSmartCard(boolean enable) {
+    public RequirementBuilder onSmartCard(final boolean enable) {
       this.enableOnSmartCard = enable;
       return this;
     }
@@ -482,7 +525,7 @@ public class Requirement {
      *          should Nordea BankID:s be enabled or disabled?
      * @return the builder
      */
-    public RequirementBuilder nordea(boolean enable) {
+    public RequirementBuilder nordea(final boolean enable) {
       this.enableNordea = enable;
       return this;
     }
@@ -541,7 +584,7 @@ public class Requirement {
      * @param value
      *          the string value of the enum
      */
-    private CardReaderRequirement(String value) {
+    private CardReaderRequirement(final String value) {
       this.value = value;
     }
 
@@ -550,10 +593,10 @@ public class Requirement {
      * 
      * @param value
      *          the string representation
-     * @return a {@code CardReaderRequirement} or {@code null} if not match is found
+     * @return a CardReaderRequirement or null if not match is found
      */
     @JsonCreator
-    public static CardReaderRequirement forValue(String value) {
+    public static CardReaderRequirement forValue(final String value) {
       for (CardReaderRequirement cr : CardReaderRequirement.values()) {
         if (cr.getValue().equals(value)) {
           return cr;

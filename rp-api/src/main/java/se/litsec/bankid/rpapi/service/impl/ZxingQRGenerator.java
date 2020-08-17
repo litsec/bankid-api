@@ -17,6 +17,7 @@ package se.litsec.bankid.rpapi.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.Instant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,19 +38,44 @@ import com.google.zxing.qrcode.QRCodeWriter;
  * @author Martin Lindström (martin@litsec.se)
  */
 public class ZxingQRGenerator extends AbstractQRGenerator {
-  
+
   /** Class logger. */
   private final Logger log = LoggerFactory.getLogger(ZxingQRGenerator.class);
 
   /** {@inheritDoc} */
   @Override
-  public byte[] generateQRCodeImage(final String autoStartToken, final int width, final int height, final ImageFormat format) throws IOException {
-    
+  public byte[] generateQRCodeImage(final String autoStartToken, final int width, final int height, final ImageFormat format)
+      throws IOException {
+    return this.generateQRCode(this.buildInput(autoStartToken), width, height, format);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public byte[] generateAnimatedQRCodeImage(final String qrStartToken, final String qrStartSecret, final Instant orderTime,
+      final int width, final int height, final ImageFormat format) throws IOException {
+    return this.generateQRCode(this.buildAnimatedInput(qrStartToken, qrStartSecret, orderTime), width, height, format);
+  }
+
+  /**
+   * Generates the QR code image based on the supplied input string.
+   * 
+   * @param input
+   *          the input
+   * @param width
+   *          the width of the generated QR code (in pixels)
+   * @param height
+   *          the height of the generated QR code (in pixels)
+   * @param format
+   *          the format for the generated QR code
+   * @return an byte array representing the generated QR code
+   * @throws IOException
+   *           for errors during generation
+   */
+  private byte[] generateQRCode(final String input, final int width, final int height, final ImageFormat format) throws IOException {
     if (ImageFormat.SVG.equals(format)) {
       throw new IOException("Image format SVG is not supported by " + this.getClass().getSimpleName());
-    }    
+    }
     try {
-      final String input = this.buildInput(autoStartToken);
       log.debug("Generating QR code in {} format based on {}", format, input);
       final QRCodeWriter writer = new QRCodeWriter();
       final BitMatrix bytes = writer.encode(input, BarcodeFormat.QR_CODE, width, height);
@@ -65,7 +91,7 @@ public class ZxingQRGenerator extends AbstractQRGenerator {
   /** {@inheritDoc} */
   @Override
   public void setDefaultImageFormat(final ImageFormat defaultImageFormat) {
-    Assert.isTrue(ImageFormat.SVG.equals(defaultImageFormat), 
+    Assert.isTrue(ImageFormat.SVG.equals(defaultImageFormat),
       "Image format SVG is not supported by " + this.getClass().getSimpleName());
     super.setDefaultImageFormat(defaultImageFormat);
   }

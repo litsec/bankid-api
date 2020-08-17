@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Litsec AB
+ * Copyright 2018-2020 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.litsec.bankid.rpapi.support;
+package se.litsec.bankid.rpapi.service.impl;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
@@ -44,7 +45,7 @@ public class ZxingQRGeneratorTest {
 
   @Test
   public void testGenerate() throws Exception {
-    QRGenerator generator = new ZxingQRGenerator();
+    final QRGenerator generator = new ZxingQRGenerator();
 
     final String autoStartToken = "46f6aa68-a520-49d8-9be7-f0726d038c26";
 
@@ -65,8 +66,20 @@ public class ZxingQRGeneratorTest {
   }
   
   @Test
+  public void testGenerateAnimated() throws Exception {
+    final QRGenerator generator = new ZxingQRGenerator();
+    
+    final String qrStartToken = "67df3917-fa0d-44e5-b327-edcc928297f8";
+    final String qrStartSecret = "d28db9a7- 4cde-429e-a983-359be676944c";
+    
+    final byte[] bytes = generator.generateAnimatedQRCodeImage(qrStartToken, qrStartSecret, Instant.now(), 300, 300, ImageFormat.PNG);
+    final String textInQR = decodeQRBytes(bytes);
+    Assert.assertTrue(textInQR.startsWith("bankid." + qrStartToken + "."));
+  }
+  
+  @Test
   public void testGenerateEmbedded() throws Exception {
-    QRGenerator generator = new ZxingQRGenerator();
+    final QRGenerator generator = new ZxingQRGenerator();
 
     final String autoStartToken = "46f6aa68-a520-49d8-9be7-f0726d038c26";
 

@@ -42,7 +42,7 @@ public class BankIDClientTest {
   
   private BankIDClientImpl client;
   
-  private static final String BANKID_URL = "https://appapi2.bankid.com/rp/v5";
+  private static final String BANKID_URL = "https://appapi2.bankid.com/rp/v5.1";
   
   @Before
   public void setup() {
@@ -56,7 +56,8 @@ public class BankIDClientTest {
   @Test
   public void testAuthenticate() throws Exception {
     
-    String responseBytes = "{ \"orderRef\" : \"131daac9-16c6-4618-beb0-365768f37288\", \"autoStartToken\" : \"7c40b5c9-fa74-49cf-b98c-bfe651f9a7c6\" }";
+    String responseBytes = "{ \"orderRef\" : \"131daac9-16c6-4618-beb0-365768f37288\", \"autoStartToken\" : \"7c40b5c9-fa74-49cf-b98c-bfe651f9a7c6\", " 
+        +  "\"qrStartToken\" : \"67df3917-fa0d-44e5-b327-edcc928297f8\", \"qrStartSecret\": \"d28db9a7-4cde-429e-a983-359be676944c\" }";
     
     this.mockServer.expect(MockRestRequestMatchers.requestTo(BANKID_URL + "/auth"))
       .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
@@ -65,5 +66,9 @@ public class BankIDClientTest {
     
     OrderResponse response = this.client.authenticate("196911292032", "85.228.133.223", null);
     Assert.assertEquals("131daac9-16c6-4618-beb0-365768f37288", response.getOrderReference());
+    Assert.assertNotNull(response.getOrderTime());
+    Assert.assertEquals("7c40b5c9-fa74-49cf-b98c-bfe651f9a7c6", response.getAutoStartToken());
+    Assert.assertEquals("67df3917-fa0d-44e5-b327-edcc928297f8", response.getQrStartToken());
+    Assert.assertEquals("d28db9a7-4cde-429e-a983-359be676944c", response.getQrStartSecret());
   }
 }

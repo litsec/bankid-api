@@ -16,11 +16,23 @@
 package se.litsec.bankid.rpapi.service.impl;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.util.Assert;
 
+import se.litsec.bankid.rpapi.service.BankIDClient;
+import se.litsec.bankid.rpapi.service.DataToSign;
 import se.litsec.bankid.rpapi.service.QRGenerator;
+import se.litsec.bankid.rpapi.types.OrderResponse;
 
 /**
  * Abstract base class for QR generation.
@@ -48,7 +60,7 @@ public abstract class AbstractQRGenerator implements QRGenerator {
   private ImageFormat defaultImageFormat = DEFAULT_IMAGE_FORMAT;
 
   /**
-   * Builds the URI that is used as input for the QR generation.
+   * Builds the URI that is used as input for the static QR generation.
    *
    * @param autoStartToken
    *          the BankID autostart token
@@ -56,6 +68,39 @@ public abstract class AbstractQRGenerator implements QRGenerator {
    */
   protected String buildInput(final String autoStartToken) {
     return "bankid:///?autostarttoken=" + autoStartToken;
+  }
+
+  /**
+   * Generates the QR data for an "animated" QR code.
+   * 
+   * @param qrStartToken
+   *          the QR start token (see {@link OrderResponse#getQrStartToken()})
+   * @param qrStartSecret
+   *          the QR start secret (see {@link OrderResponse#getQrStartSecret()})
+   * @param orderTime
+   *          the instant when the result from an
+   *          {@link BankIDClient#authenticate(String, String, se.litsec.bankid.rpapi.types.Requirement)} or a
+   *          {@link BankIDClient#sign(String, String, DataToSign, se.litsec.bankid.rpapi.types.Requirement)} call was
+   *          received
+   * @return the QR data
+   * @throws IOException
+   *           for errors calculating the code
+   */
+  protected String buildAnimatedInput(final String qrStartToken, final String qrStartSecret, final Instant orderTime) throws IOException {
+    try {
+      final String qrTime = Long.toString(orderTime.until(Instant.now(), ChronoUnit.SECONDS));
+
+      final Mac mac = Mac.getInstance("HmacSHA256");
+      mac.init(new SecretKeySpec(qrStartSecret.getBytes(StandardCharsets.US_ASCII), "HmacSHA256"));
+      mac.update(qrTime.getBytes(StandardCharsets.US_ASCII));
+
+      final String qrAuthCode = String.format("%064x", new BigInteger(1, mac.doFinal()));
+
+      return String.join(".", "bankid", qrStartToken, qrTime, qrAuthCode);
+    }
+    catch (NoSuchAlgorithmException | InvalidKeyException | IllegalStateException e) {
+      throw new IOException("Failed to compute HMAC", e);
+    }
   }
 
   /** {@inheritDoc} */
@@ -66,11 +111,19 @@ public abstract class AbstractQRGenerator implements QRGenerator {
 
   /** {@inheritDoc} */
   @Override
-  public String generateQRCodeBase64Image(final String autoStartToken, final int width, final int height, final ImageFormat format) 
+  public byte[] generateAnimatedQRCodeImage(final String qrStartToken, final String qrStartSecret, final Instant orderTime)
       throws IOException {
-    
+    return this.generateAnimatedQRCodeImage(qrStartToken, qrStartSecret, orderTime, this.defaultWidth, this.defaultHeight,
+      this.defaultImageFormat);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String generateQRCodeBase64Image(final String autoStartToken, final int width, final int height, final ImageFormat format)
+      throws IOException {
+
     final byte[] imageBytes = this.generateQRCodeImage(autoStartToken, width, height, format);
-    return String.format("data:image/%s;base64, %s", 
+    return String.format("data:image/%s;base64, %s",
       format.getImageFormatName().toLowerCase(), Base64.getEncoder().encodeToString(imageBytes));
   }
 
@@ -78,6 +131,23 @@ public abstract class AbstractQRGenerator implements QRGenerator {
   @Override
   public String generateQRCodeBase64Image(final String autoStartToken) throws IOException {
     return this.generateQRCodeBase64Image(autoStartToken, this.defaultWidth, this.defaultHeight, this.defaultImageFormat);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String generateAnimatedQRCodeBase64Image(final String qrStartToken, final String qrStartSecret, final Instant orderTime,
+      final int width, final int height, final ImageFormat format) throws IOException {
+    final byte[] imageBytes = this.generateAnimatedQRCodeImage(qrStartToken, qrStartSecret, orderTime, width, height, format);
+    return String.format("data:image/%s;base64, %s",
+      format.getImageFormatName().toLowerCase(), Base64.getEncoder().encodeToString(imageBytes));
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String generateAnimatedQRCodeBase64Image(final String qrStartToken, final String qrStartSecret, final Instant orderTime)
+      throws IOException {
+    return this.generateAnimatedQRCodeBase64Image(qrStartToken, qrStartSecret, orderTime,
+      this.defaultWidth, this.defaultHeight, this.defaultImageFormat);
   }
 
   /**
