@@ -46,7 +46,7 @@
 
     <!-- Versions on dependencies -->
     <spring.min.version>5.0.0.RELEASE</spring.min.version>
-    <http-client.version>4.5.6</http-client.version>
+    <http-client.version>4.5.13</http-client.version>
     <jackson.version>2.11.0</jackson.version>
     <zxing.versison>3.3.3</zxing.versison>
     <slf4j.version>1.7.25</slf4j.version>
